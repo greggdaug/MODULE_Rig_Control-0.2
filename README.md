@@ -9,4 +9,5 @@ apt install libhamlib-utils
 ### Add svxlink user to port group:
 i.e. /dev/ttyUSB0
 
+### Add user svxlink to group dialout
 usermod -a -G dialout svxlink
