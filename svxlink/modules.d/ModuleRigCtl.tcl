@@ -271,11 +271,25 @@ namespace eval RigCtl {
 			
 		} elseif {$cmd == "101"} {
 			set sigstr [exec python3 /usr/share/svxlink/python/signalstrength.py]
-			# set sigstr "89"
-			printInfo "Signal Strength = $sigstr"
+			printInfo "Signal Strength = -$sigstr dBm"
 			playModuleMsg "minus"
 			playNumber [string trimright [format "%.3f" $sigstr] ".0"]
 			playModuleMsg "dbm"
+			
+		} elseif {$cmd == "102"} {
+			set sigstr [exec python3 /usr/share/svxlink/python/preamp1_on.py]
+			printInfo "Preamp1 On"
+			playModuleMsg "preamp1_on"
+			
+		} elseif {$cmd == "103"} {
+			set sigstr [exec python3 /usr/share/svxlink/python/preamp2_on.py]
+			printInfo "Preamp2 On"
+			playModuleMsg "preamp2_on"
+			
+		} elseif {$cmd == "104"} {
+			set sigstr [exec python3 /usr/share/svxlink/python/preamp_off.py]
+			printInfo "Preamp Off"
+			playModuleMsg "preamp_off"
 			
 		} elseif {[string length $cmd] == 9} {
 		    set freq $cmd

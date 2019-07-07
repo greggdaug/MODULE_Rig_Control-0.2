@@ -12,6 +12,7 @@ Command structure = FE FE 88 E0 15 02 FD (reading between 0 and 241, 120 = s9)
 
 import serial
 import struct
+import math
 
 ser = serial.Serial('/dev/ttyUSB0',baudrate=9600,timeout=0.5)
 
@@ -30,12 +31,12 @@ s = ser.read_until('')
 
 # print(s)
 
-bytes = b'\x12\x45\x00\xab'
+# bytes = b'\x12\x45\x00\xab'
 val = struct.unpack('<BBBBBBBBBBBBBBBB', s)
 
 sval = val[13]+val[14]
 
-svaldbm = -0.0006944*sval**2 + 0.75*sval -153
+svaldbm = abs(math.ceil(-0.0006944*sval**2 + 0.75*sval - 153))
 
 print(svaldbm)
 
