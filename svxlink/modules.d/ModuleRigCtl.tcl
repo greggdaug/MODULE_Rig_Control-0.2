@@ -54,8 +54,8 @@ namespace eval RigCtl {
 		set RIG_STRING "-m $CFG_RADIO_ID -r $CFG_RADIO_PORT -s $CFG_RADIO_BAUD"
 		printInfo $RIG_STRING
 
-                #variable CFG_PTT_LOCK_ON
-                #variable CFG_PTT_LOCK_OFF
+        #variable CFG_PTT_LOCK_ON
+        #variable CFG_PTT_LOCK_OFF
 		#variable SET_PTT_LOCK_ON
 		#variable SET_PTT_LOCK_OFF
 		#set SET_PTT_LOCK_ON $CFG_PTT_LOCK_ON
@@ -235,6 +235,9 @@ namespace eval RigCtl {
 		variable RIG_COMMAND
 		variable freq
 		variable modeout
+		variable temp1
+		
+		printInfo "$cmd"
 
 		# set SET_PTT_LOCK_ON "-m 370 -r /dev/ttyUSB0 -s 9600 w '\0xFE\0xFE\0x88\0xE0\0x1A\0x05\0x00\0x14\0x01\0xFD'"
 		# exec rigctl {*}$SET_PTT_LOCK_ON
@@ -244,10 +247,10 @@ namespace eval RigCtl {
 			exec python3 /usr/share/svxlink/python/set_pttlock_on.py
             printInfo "pttlock on"
             playModuleMsg "pttlockon"
+			set curMem $cmd
+			# printInfo $curMem
 			set RIG_COMMAND "$RIG_STRING V MEM"
 			exec rigctl {*}$RIG_COMMAND
-			set curMem $cmd
-			printInfo $curMem
 			playModuleMsg "memory"
 			playNumber $curMem
 			playSilence 1000;
@@ -266,6 +269,14 @@ namespace eval RigCtl {
 			printInfo "pttlock off"
 			playModuleMsg "pttlockoff"
 			
+		} elseif {$cmd == "101"} {
+			set sigstr [exec python3 /usr/share/svxlink/python/signalstrength.py]
+			# set sigstr "89"
+			printInfo "Signal Strength = $sigstr"
+			playModuleMsg "minus"
+			playNumber [string trimright [format "%.3f" $sigstr] ".0"]
+			playModuleMsg "dbm"
+			
 		} elseif {[string length $cmd] == 9} {
 		    set freq $cmd
 			printInfo $freq
@@ -279,7 +290,7 @@ namespace eval RigCtl {
 				set currentFreq [getRigFreq]
 				printFreq $currentFreq
 				playFrequency $currentFreq
-				set RIG_COMMAND "$RIG_STRING M FM 6000"
+				set RIG_COMMAND "$RIG_STRING M FM 10000"
 				exec rigctl {*}$RIG_COMMAND
 				playModuleMsg "FM"
 			} elseif {[string index $freq 2] == 1} {
@@ -395,6 +406,7 @@ namespace eval RigCtl {
 
 		} else {
 			# No Pin Required - Pass straight on to relay control
+			# printInfo $cmd
 			changeRigState $cmd
 		}
 
