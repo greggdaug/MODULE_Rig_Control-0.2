@@ -243,11 +243,11 @@ namespace eval RigCtl {
 		# exec rigctl {*}$SET_PTT_LOCK_ON
                 # playModuleMsg "pttlockon"
 
-		if {$cmd == "01" || $cmd == "02" || $cmd == "03" || $cmd == "04" || $cmd == "05" || $cmd == "06" || $cmd == "07" || $cmd == "08"} {
+		if {$cmd == "01" || $cmd == "02" || $cmd == "03" || $cmd == "04" || $cmd == "05" || $cmd == "06" || $cmd == "07" || $cmd == "08" || $cmd == "09"} {
 			exec python3 /usr/share/svxlink/python/set_pttlock_on.py
             printInfo "pttlock on"
             playModuleMsg "pttlockon"
-			set curMem $cmd
+			set curMem $cmd 
 			# printInfo $curMem
 			set RIG_COMMAND "$RIG_STRING V MEM"
 			exec rigctl {*}$RIG_COMMAND
@@ -264,7 +264,7 @@ namespace eval RigCtl {
 				playMsg "Default" "operation_failed"
 			}
 			
-		} elseif {$cmd == "09"} {
+		} elseif {$cmd == "100"} {
 			exec python3 /usr/share/svxlink/python/set_pttlock_off.py
 			printInfo "pttlock off"
 			playModuleMsg "pttlockoff"
@@ -277,19 +277,30 @@ namespace eval RigCtl {
 			playModuleMsg "dbm"
 			
 		} elseif {$cmd == "102"} {
-			set sigstr [exec python3 /usr/share/svxlink/python/preamp1_on.py]
+			exec python3 /usr/share/svxlink/python/preamp1_on.py
 			printInfo "Preamp1 On"
 			playModuleMsg "preamp1_on"
 			
 		} elseif {$cmd == "103"} {
-			set sigstr [exec python3 /usr/share/svxlink/python/preamp2_on.py]
+			exec python3 /usr/share/svxlink/python/preamp2_on.py
 			printInfo "Preamp2 On"
 			playModuleMsg "preamp2_on"
 			
 		} elseif {$cmd == "104"} {
-			set sigstr [exec python3 /usr/share/svxlink/python/preamp_off.py]
+			exec python3 /usr/share/svxlink/python/preamp_off.py
 			printInfo "Preamp Off"
 			playModuleMsg "preamp_off"
+			
+		} elseif {$cmd == "105"} {
+			exec python3 /usr/share/svxlink/python/set_pttlock_on.py
+			exec python3 /usr/share/svxlink/python/memscan_on.py
+			printInfo "Memory Scan on"
+			playModuleMsg "memory_scan_on"
+			
+		} elseif {$cmd == "106"} {
+			exec python3 /usr/share/svxlink/python/memscan_off.py
+			printInfo "Memory Scan off"
+			playModuleMsg "memory_scan_off"
 			
 		} elseif {[string length $cmd] == 9} {
 		    set freq $cmd
