@@ -34,9 +34,14 @@ s = ser.read_until('')
 # bytes = b'\x12\x45\x00\xab'
 val = struct.unpack('<BBBBBBBBBBBBBBBB', s)
 
+# print(val)
+
 sval = val[13]+val[14]
 
-svaldbm = abs(math.ceil(-0.0006944*sval**2 + 0.75*sval - 153))
+# print(sval)
+
+# svaldbm = abs(math.ceil(-0.00071*sval**2 + 0.75*sval - 153))
+svaldbm = abs(math.ceil(0.00012*sval**2 + 0.45*sval - 129))
 
 print(svaldbm)
 
