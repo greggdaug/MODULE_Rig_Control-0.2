@@ -52,7 +52,8 @@ variable sql_rx_id 0;
 # Set initial rx2 send signal strength variable
 #
 
-variable send_sigstrength "0"
+variable send_sigstrength 0;
+# variable rx2_sigstr 0;
 
 #
 # Executed when the SvxLink software is started
@@ -185,17 +186,27 @@ proc send_long_ident {hour minute} {
 # Executed when the squelch just have closed and the RGR_SOUND_DELAY timer has
 # expired.
 #
-proc send_rgr_sound {} {
-  variable sql_rx_id;
-
-  playTone 440 500 100;
-  playSilence 200;
-
-  for {set i 0} {$i < $sql_rx_id} {incr i 1} {
-    playTone 880 500 50;
-    playSilence 50;
+proc send_rgr_sound {sig} {
+  if {$Logic::send_sigstrength == "1"} {
+    set sigstr $sig
+    puts "ORP2 Signal Strength = -$sigstr dBm"
+    playMsg "Core" "minus"
+    playNumber [string trimright [format "%.3f" $sigstr] ".0"]
+    playMsg "Core" "dbm"
   }
-  playSilence 100;
+  playFile "/var/lib/openrepeater/sounds/courtesy_tones/Apollo.wav"
+  playSilence 200
+  
+  # variable sql_rx_id;
+
+  # playTone 440 500 100;
+  # playSilence 200;
+
+  # for {set i 0} {$i < $sql_rx_id} {incr i 1} {
+    # playTone 880 500 50;
+    # playSilence 50;
+  # }
+  # playSilence 100;
 }
 
 
@@ -345,8 +356,6 @@ proc transmit {is_on} {
 #
 proc squelch_open {rx_id is_open} {
   variable sql_rx_id;
-  #puts "The squelch is $is_open on RX $rx_id";
-  set sql_rx_id $rx_id;
 }
 
 

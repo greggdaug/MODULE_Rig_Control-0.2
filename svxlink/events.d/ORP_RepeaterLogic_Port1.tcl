@@ -26,7 +26,6 @@ if {$logic_name != [namespace tail [namespace current]]} {
   return;
 }
 
-
 #
 # This variable indicates if the repeater is up or not
 #
@@ -66,16 +65,17 @@ proc manual_identification {} {
 #
 
 proc send_rgr_sound {} {
-
   if {$Logic::send_sigstrength == "1"} {
-    RigCtl::printInfo "Signal Strength = -$ORP_SimplexLogic_Port2::rx2_sigstr dBm"
+    set fp [open "/usr/share/svxlink/python/sigstr.txt" r]
+    set sigstr [read $fp]
+    close $fp
+    puts "ORP2 Signal Strength = -$sigstr dBm"
     playMsg "Core" "minus"
-    playNumber [string trimright [format "%.3f" $ORP_SimplexLogic_Port2::rx2_sigstr] ".0"]
+    playNumber [string trimright [format "%.3f" $sigstr] ".0"]
     playMsg "Core" "dbm"
   }
   playFile "/var/lib/openrepeater/sounds/courtesy_tones/Apollo.wav"
   playSilence 200
-
 }
 
 

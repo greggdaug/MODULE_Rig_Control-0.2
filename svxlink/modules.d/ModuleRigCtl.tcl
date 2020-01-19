@@ -26,7 +26,6 @@ namespace eval RigCtl {
         return;
     }
 
-
     # Extract the module name from the current namespace
     set module_name [namespace tail [namespace current]]
 

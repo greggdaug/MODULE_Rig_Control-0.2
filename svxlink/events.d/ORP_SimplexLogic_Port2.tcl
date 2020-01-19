@@ -19,7 +19,7 @@
 #
 namespace eval ORP_SimplexLogic_Port2 {
 
-variable rx2_sigstr "199"
+# variable rx2_sigstr 0
 
 #
 # Checking to see if this is the correct logic core
@@ -38,7 +38,6 @@ proc startup {} {
   Logic::addTimerTickSubscriber $func;
   Logic::startup;
 }
-
 
 #
 # Executed when a specified module could not be found
@@ -185,6 +184,12 @@ proc transmit {is_on} {
   Logic::transmit $is_on;
 }
 
+# proc get_sigstr {} {
+#  global rx2_sigstr
+#  set rx2_sigstr [exec python3 /usr/share/svxlink/python/signalstrength.py]
+#  puts "RX2 signal strength $rx2_sigstr"
+#  return $rx2_sigstr
+# }
 
 #
 # Executed each time the squelch is opened or closed
@@ -194,7 +199,10 @@ proc squelch_open {rx_id is_open} {
   if {$is_open == "1"} {
     set rx2_sigstr [exec python3 /usr/share/svxlink/python/signalstrength.py]
     puts "RX2 signal strength $rx2_sigstr"
-  }  
+    set fp [open "/usr/share/svxlink/python/sigstr.txt" w]
+    puts $fp $rx2_sigstr
+    close $fp
+  }
 }
 
 
