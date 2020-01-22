@@ -36,12 +36,12 @@ val = struct.unpack('<BBBBBBBBBBBBBBBB', s)
 
 # print(val)
 
-sval = val[13]+val[14]
+sval = 100*val[13]+val[14]
 
 # print(sval)
 
 # svaldbm = abs(math.ceil(-0.00071*sval**2 + 0.75*sval - 153))
-svaldbm = abs(math.ceil(0.00012*sval**2 + 0.45*sval - 129))
+svaldbm = math.ceil(0.00012*sval**2 + 0.45*sval - 129)
 
 print(svaldbm)
 

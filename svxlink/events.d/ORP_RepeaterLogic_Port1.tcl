@@ -69,9 +69,11 @@ proc send_rgr_sound {} {
     set fp [open "/usr/share/svxlink/python/sigstr.txt" r]
     set sigstr [read $fp]
     close $fp
-    puts "ORP2 Signal Strength = -$sigstr dBm"
-    playMsg "Core" "minus"
-    playNumber [string trimright [format "%.3f" $sigstr] ".0"]
+    puts "ORP2 Signal Strength = $sigstr dBm"
+    if {$sigstr < 0} {  
+      playMsg "Core" "minus"
+    }  
+    playNumber [string trimright [format "%.3f" ::tcl::mathfunc::abs $sigstr] ".0"]
     playMsg "Core" "dbm"
   }
   playFile "/var/lib/openrepeater/sounds/courtesy_tones/Apollo.wav"
