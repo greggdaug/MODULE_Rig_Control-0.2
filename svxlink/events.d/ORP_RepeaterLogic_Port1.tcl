@@ -73,7 +73,7 @@ proc send_rgr_sound {} {
     if {$sigstr < 0} {  
       playMsg "Core" "minus"
     }  
-    playNumber [string trimright [format "%.3f" ::tcl::mathfunc::abs $sigstr] ".0"]
+    playNumber [string trimright [format "%.3f" [::tcl::mathfunc::abs $sigstr]] ".0"]
     playMsg "Core" "dbm"
   }
   playFile "/var/lib/openrepeater/sounds/courtesy_tones/Apollo.wav"
