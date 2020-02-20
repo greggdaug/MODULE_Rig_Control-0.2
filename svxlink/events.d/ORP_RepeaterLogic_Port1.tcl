@@ -66,15 +66,32 @@ proc manual_identification {} {
 
 proc send_rgr_sound {} {
   if {$Logic::send_sigstrength == "1"} {
-    set fp [open "/usr/share/svxlink/python/sigstr.txt" r]
-    set sigstr [read $fp]
+    set fp [open "/usr/share/svxlink/python/sigstr1.txt" r]
+    set sigstr1 [read $fp]
     close $fp
-    puts "ORP2 Signal Strength = $sigstr dBm"
-    if {$sigstr < 0} {  
-      playMsg "Core" "minus"
-    }  
-    playNumber [string trimright [format "%.3f" [::tcl::mathfunc::abs $sigstr]] ".0"]
-    playMsg "Core" "dbm"
+    set fp [open "/usr/share/svxlink/python/sigstr2.txt" r]
+    set sigstr2 [read $fp]
+    close $fp
+    set fp [open "/usr/share/svxlink/python/sigstr3.txt" r]
+    set sigstr3 [read $fp]
+    close $fp
+    set sigstr $sigstr1
+    
+    if {$sigstr2 > $sigstr} {
+        set sigstr $sigstr2
+    }   
+    if {$sigstr3 > $sigstr} {
+        set sigstr $sigstr3
+    }
+
+    if {$sigstr > -128} {
+        puts "ORP2 Signal Strength: $sigstr"
+        if {$sigstr < 0} {  
+            playMsg "Core" "minus"
+        }  
+        playNumber [string trimright [format "%.3f" [::tcl::mathfunc::abs $sigstr]] ".0"]
+        playMsg "Core" "dbm"
+    }    
   }
   playFile "/var/lib/openrepeater/sounds/courtesy_tones/Apollo.wav"
   playSilence 200

@@ -197,9 +197,23 @@ proc transmit {is_on} {
 proc squelch_open {rx_id is_open} {
   Logic::squelch_open $rx_id $is_open;
   if {$is_open == "1"} {
+    after 750
+    puts "RX2 COS = $is_open"
     set rx2_sigstr [exec python3 /usr/share/svxlink/python/signalstrength.py]
-    puts "RX2 signal strength $rx2_sigstr"
-    set fp [open "/usr/share/svxlink/python/sigstr.txt" w]
+    puts "RX2 signal strength1: $rx2_sigstr"
+    set fp [open "/usr/share/svxlink/python/sigstr1.txt" w]
+    puts $fp $rx2_sigstr
+    close $fp
+    after 100
+    set rx2_sigstr [exec python3 /usr/share/svxlink/python/signalstrength.py]
+    puts "RX2 signal strength2: $rx2_sigstr"
+    set fp [open "/usr/share/svxlink/python/sigstr2.txt" w]
+    puts $fp $rx2_sigstr
+    close $fp
+    after 100
+    set rx2_sigstr [exec python3 /usr/share/svxlink/python/signalstrength.py]
+    puts "RX2 signal strength3: $rx2_sigstr"
+    set fp [open "/usr/share/svxlink/python/sigstr3.txt" w]
     puts $fp $rx2_sigstr
     close $fp
   }
